@@ -11,7 +11,7 @@ ArrayList<Direction> buffer = new ArrayList<>();
 
 void setup() {
   fullScreen();
-  frameRate(5);
+  frameRate(30);
 
   cols = width / scl;
   rows = height / scl;
@@ -32,13 +32,16 @@ void draw() {
   fill(33);
   rect(0, 0, cols * scl, rows * scl);
   
-  if (buffer.size() > 0) {
-    snake.rotate(buffer.get(0));
-    buffer.remove(0);
+  if (frameCount % 10 == 0) {
+    if (buffer.size() > 0) {
+      snake.rotate(buffer.get(0));
+      buffer.remove(0);
+    }
+  
+    snake.update();
   }
 
   food.show(scl);
-  snake.update();
   snake.show(scl);  
   if (snake.eat(food)) {
     snake.grow();
@@ -55,6 +58,10 @@ void keyPressed() {
     buffer.add(Direction.LEFT);
   } else if (keyCode == RIGHT) {
     buffer.add(Direction.RIGHT);
+  }
+  
+  if (keyCode == 32) {
+    noLoop();
   }
   
   if (buffer.size() > 2) {
